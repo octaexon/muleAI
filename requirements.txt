@@ -36,7 +36,7 @@ SecretStorage==2.3.1
 six==1.10.0
 smbus2==0.2.1
 tensorboard==1.8.0
-tensorflow==1.8.0
+tensorflow==1.15.0
 termcolor==1.1.0
 virtualenv==16.1.0
 virtualenv-clone==0.4.0
