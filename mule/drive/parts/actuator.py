@@ -1,7 +1,7 @@
 import math
 import functools
 import time
-from parts.base import BasePart
+from .base import BasePart
 import logging
 
 

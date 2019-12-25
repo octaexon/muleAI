@@ -1,4 +1,4 @@
-from parts.base import BasePart
+from .base import BasePart
 import random
 import logging
 import time

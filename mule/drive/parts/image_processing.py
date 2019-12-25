@@ -1,4 +1,4 @@
-from parts.base import BasePart
+from .base import BasePart
 
 import cv2
 import numpy as np

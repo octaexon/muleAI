@@ -1,6 +1,6 @@
 
 from tensorflow.python.keras.models import load_model
-from parts.base import BasePart
+from .base import BasePart
 
 import numpy as np
 

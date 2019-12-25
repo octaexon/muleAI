@@ -24,7 +24,7 @@ def list_path():
 
 
 def print_tensor_devices():
-    
+
     from tensorflow.python.client import device_lib
     
     

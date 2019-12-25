@@ -1,7 +1,5 @@
-from parts.base import BasePart
+from .base import BasePart
 import cv2
-import parts.base
-
 
 class DisplayFeed(BasePart):
     ''' Displays image feed to screen '''

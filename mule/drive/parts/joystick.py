@@ -18,7 +18,7 @@ import array
 import struct
 #from collections import OrderedDict
 import collections
-from parts.base import BasePart, ThreadComponent
+from .base import BasePart, ThreadComponent
 import utilities.jsio as jsio
 import pprint
 import logging

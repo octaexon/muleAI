@@ -29,25 +29,25 @@ def parse_config(path):
 
         In turn this 2-element dict contains the class type of the part (as a string)
         and the argument to be passed to this class upon initialization.
-        
+
         returns a dictionary
     '''
 
     with open(path, 'r') as fd:
         config = yaml.load(fd)
-    
+
     logging.info('Loaded configuration yaml file into dict: {}'.format(path))
-    
-    #pprint.pprint(config)
-    
+
+    pprint.pprint(config)
+
     for part in config['parts']:
         #print(part)
         print("")
-        
+
         part_module = list(part.keys())
         assert len(part_module) == 1
         part_module = part_module.pop()
-        
+
         print("Part type:", part[part_module]['type'])
         print("Part module: {}.py".format(part_module))
         if 'arguments' in part[part_module].keys():
@@ -59,13 +59,13 @@ def parse_config(path):
     #parsed_config = Config()
 
     #parsed_config.drive = config['drive'] if config.get('drive') else {}
-    
+
     return config
 
 def create_protoparts(parts):
-    """
+    """rp
     A validator for parts
-    
+
     From a config dictionary, go through each part and ensure the module and
     class exist. Return a list of 'protoparts'. 
     """    
@@ -79,14 +79,14 @@ def create_protoparts(parts):
         # attributes = elements needed to construct part
         name, attributes = component.popitem()
 
-        name = 'parts.{}'.format(name) 
-        
+        name = 'mule.drive.parts.{}'.format(name) 
+
         logging.info('Processing {} {}'.format(name, attributes))
 
-        
+
         # submodule of parts module containing the actual part
         module = importlib.import_module(name)
-        
+
         protopart = ProtoPart()
 
         # attributes is a 2-element dict
@@ -104,11 +104,11 @@ def create_protoparts(parts):
         logging.debug("Created a protopart: {} {}".format(protopart.type,protopart.arguments))
 
         protoparts.append(protopart)
-    
+
     logging.debug("Returning {} protoparts ready for instantiation".format(len(protoparts)))
 
     #parsed_config.parts = protoparts
-    
+
     #logging.info('Parsed config {}'.format(parsed_config))
 
     return protoparts

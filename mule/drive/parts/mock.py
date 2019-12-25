@@ -1,4 +1,4 @@
-from parts.base import BasePart
+from .base import BasePart
 
 class MockMode(BasePart):
     input_keys = ()

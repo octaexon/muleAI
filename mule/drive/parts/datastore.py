@@ -6,7 +6,7 @@ import numpy as np
 import random
 import itertools
 from collections import OrderedDict
-from parts.base import BasePart
+from .base import BasePart
 import datetime
 #from samba.dcerpc.drsblobs import ldapControlDirSyncBlob
 import logging

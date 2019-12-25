@@ -1,7 +1,7 @@
 import time
 
 from itertools import count
-from utilities.generic import regulate
+from mule.utils.generic import regulate
 import logging
 #from numpy.core.multiarray_tests import npy_log10l
 
@@ -44,15 +44,15 @@ class Vehicle():
         """Helper to print concise state"""
         state_strings = list()
         for key in self.state:
-            
+
             if type(self.state[key]) == np.ndarray:
                 this_variable = self.state[key].shape
             else:
                 this_variable = self.state[key]
             state_strings.append("{}={}".format(key,this_variable))
-    
+
         return ", ".join(state_strings)
-     
+
     def add(self, part):
         ''' Adds part to vehicle
 
@@ -78,7 +78,7 @@ class Vehicle():
         logging.debug("Registering {} output key(s)".format(len(part.output_keys)))
 
         self.state_keys = self.state_keys.union(set(part.output_keys))
-        
+
         logging.debug("Keys: {}".format(self.state_keys))
 
 

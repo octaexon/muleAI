@@ -1,8 +1,10 @@
-import numpy as np
 import time
-from parts.base import BasePart, ThreadComponent
 import logging
 
+import numpy as np
+import cv2 as cv2
+
+from .base import BasePart, ThreadComponent
 
 class BaseCam(BasePart):
     ''' Functionality and state common to all cameras
@@ -53,8 +55,8 @@ class BaseCam(BasePart):
 
         state['camera_array'] = self.frame
         #logging.debug("Camera shape: {}, max_value: {}".format(state['camera_array'].shape, np.max(state['camera_array'])))
-        
-        
+
+
 
 
     def stop(self):
@@ -122,14 +124,13 @@ class PiCam(BaseCam):
         if self.colormode=='RGB':
             self.rgb_or_yuv_stream = picamera.array.PiRGBArray(self.camera, self.resolution)
             #self.array_stream = self.rgb_stream
-        	self.stream = self.camera.capture_continuous(self.rgb_or_yuv_stream, format='rgb', use_video_port=True)
+            self.stream = self.camera.capture_continuous(self.rgb_or_yuv_stream, format='rgb', use_video_port=True)
         elif self.colormode=='YUV':
             self.rgb_or_yuv_stream = picamera.array.PiYUVArray(self.camera, self.resolution)
             #self.this_stream = self.yuv_stream
-        	self.stream = self.camera.capture_continuous(self.rgb_or_yuv_stream, format='yuv', use_video_port=True)
+            self.stream = self.camera.capture_continuous(self.rgb_or_yuv_stream, format='yuv', use_video_port=True)
         else:
             raise
-        
 
         super().start()
 
@@ -155,9 +156,10 @@ class PiCam(BaseCam):
 # TODO: add device search -- on the pi, there is the possibility for multiple devices
 #                            but for one webcam, it will be 0 (I think).
 #                            if not, then >> ls -l /dev/video*
+
 class WebCam(BaseCam):
     ''' Web camera 
-    
+
         Most web cameras are not so flexible as to allow for arbitrary
         resolution, for example, the macbook air iSight camera allows
         for a small subset of resolutions between (1280x720) and (320x240)
@@ -165,9 +167,6 @@ class WebCam(BaseCam):
 
         Note: if asked for a higher resolution than supported by the hardware, 
         it does not perform a crop (in that dimension)
-
-
-    
     '''
     def __init__(self, resolution=(160, 120), framerate=24, threaded=False):
         super().__init__(resolution, framerate, threaded)
@@ -175,7 +174,6 @@ class WebCam(BaseCam):
     def start(self):
         ''' Start camera and set resolution 
         '''
-        import cv2 as cv2
         # 0 is default web camera device number
         self.camera = cv2.VideoCapture(0)
         # with limited success

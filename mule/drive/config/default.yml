@@ -1,5 +1,7 @@
 drive:
     freq_hertz: 10
+    verbose: False
+    verbosity: 10
 
 parts:
   - camera: 

@@ -15,7 +15,7 @@ import fcntl
 import array
 import struct
 from collections import OrderedDict
-from parts.base import BasePart, ThreadComponent
+from .base import BasePart, ThreadComponent
 import utilities.jsio as jsio
 
 

@@ -1,22 +1,20 @@
 #!/usr/bin/env python3
 import click
-import logging.config
 import yaml
 import os
 import sys
-    
-from utilities import configure as configutil
-from vehicle import Vehicle
+import logging.config
 
-CONFIG_DIR = 'configurations'
-LOGGING_DIR = 'logging'
+from mule import ROOT
 
-#LOGGING_DIR_HARD_CODE = "~/muleAI/mule/logging/logging.simple.yml"
+from mule.utils import configure as configutil
+from mule.drive.vehicle import Vehicle
+
+DEFAULT_LOGCFG = os.path.join(ROOT, 'log/config/default.yml')
+DEFAULT_DRVCFG = os.path.join(ROOT, 'drive/config/default.yml')
 
 @click.group()
-@click.option('--logcfg', default=None, type=click.Path(exists=True))
-#@click.option('--logcfg', default=LOGGING_DIR_HARD_CODE,type=click.Path())
-#@click.option('--logcfg', default=None,type=click.Path(exists=True))
+@click.option('--logcfg', default=DEFAULT_LOGCFG, type=click.Path(exists=True, readable=True))
 def cli(logcfg):
     print('Opening {}'.format(logcfg))
     with open(logcfg, 'r') as fd:
@@ -25,34 +23,17 @@ def cli(logcfg):
 
     logging.info('Logging brought to you by {}'.format(logcfg))
 
+@cli.command()
+def calibrate():
+    pass
 
 @cli.command()
-def create():
-    pass
-
-
-@cli.command()
-def find():
-    pass
-
-
-@click.command()
-@click.option('--cfg', default=os.path.join(CONFIG_DIR,'config.calibrate.yml'), type=click.Path(exists=True))
-def calibrate(cfg):
-    pass
-
-cli.add_command(calibrate)
-
-
-@click.command()
-@click.option('--cfg', default=os.path.join(CONFIG_DIR,'config.drive.yml'), type=click.Path(exists=True))
+@click.option('--cfg', default=DEFAULT_DRVCFG, type=click.Path(exists=True, readable=True))
 @click.option('--model_path', type=click.Path(exists=True),required=False)
-#@click.option('--logcfg', default=os.path.join(LOGGING_DIR, 'logging.simple.yml'), type=click.Path(exists=True))
-def drive(cfg,model_path):
-    
+def drive(cfg, model_path):
+
     #print(model_path)
     #raise
-
 
     config = configutil.parse_config(cfg)
 
@@ -70,7 +51,7 @@ def drive(cfg,model_path):
     #print(config)
     #raise
     protoparts = configutil.create_protoparts(config['parts'])
-    
+
     logging.info('Creating vehicle from loaded configuration')
 
     mule = Vehicle.from_config(protoparts)
@@ -90,13 +71,11 @@ def drive(cfg,model_path):
 
     mule.stop()
     logging.info("Done with this driving session, exiting python.")
-    
+
 
 @cli.command()
 def train():
     pass
-
-cli.add_command(drive)
 
 if __name__ == '__main__':
     print('*** Welcome to Mule.AI ***')
