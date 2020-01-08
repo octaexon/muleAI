@@ -1,0 +1,17 @@
+version: 1
+disable_existing_loggers: False
+formatters:
+  file:
+    format: "%(asctime)s - %(levelname)-3s - %(name)-20s  %(funcName)-20s : %(message)s"
+    datefmt: "%Y-%m-%d %H:%M:%S"
+handlers:
+  file:
+    (): mule.logging.TimestampRotatingFileHandler
+    maxBytes: 10485760 # 10MB
+    backupCount: 20
+    encoding: utf8
+    level: DEBUG
+    formatter: dump
+root:
+  level: DEBUG
+  handlers: [file]

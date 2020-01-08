@@ -19,3 +19,6 @@ __pycache__/
 # Python egg metadata
 /*.egg-info
 /*.egg
+
+# Logging files
+*.log
