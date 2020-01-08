@@ -1,0 +1,39 @@
+axes:
+  0: thumb-left-x
+  1: thumb-left-y
+  2: thumb-right-x
+  5: thumb-right-y
+  44: dpad-up
+  45: dpad-right
+  46: dpad-down
+  47: dpad-left
+  48: trigger-left
+  49: trigger-right
+  50: shoulder-left
+  51: shoulder-right
+  52: triangle
+  53: circle
+  54: cross
+  55: square
+  59: accelerometer-x
+  60: accelerometer-y
+  61: accelerometer-z
+buttons:
+  288: select
+  289: stick-left
+  290: stick-right
+  291: start
+  292: dpad-up
+  293: dpad-right
+  294: dpad-down
+  295: dpad-left
+  296: trigger-left
+  297: trigger-right
+  298: shoulder-left
+  299: shoulder-right
+  300: triangle
+  301: circle
+  302: cross
+  303: square
+  704: ps-logo
+ref: ps3_dualshock3_sony

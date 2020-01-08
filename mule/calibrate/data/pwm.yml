@@ -1,0 +1,5 @@
+args:
+  address: 64
+  frequency: 50
+class: PCA9685
+ref: pwm

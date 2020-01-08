@@ -1,3 +1,8 @@
+"""Calibrate GPIO LED
+
+Work in progress
+"""
+
 import RPi.GPIO as GPIO
 import time
 import logging
@@ -40,35 +45,35 @@ def cycle_blue():
         GPIO.output(PIN_BLUE2,  False)
         GPIO.output(PIN_BLUE3,  False)
         GPIO.output(PIN_BLUE4,  False)
-    
+
         time.sleep(interval)
-    
+
         GPIO.output(PIN_BLUE1,  False)
         GPIO.output(PIN_BLUE2,  True)
         GPIO.output(PIN_BLUE3,  False)
         GPIO.output(PIN_BLUE4,  False)
-    
+
         time.sleep(interval)
-    
+
         GPIO.output(PIN_BLUE1,  False)
         GPIO.output(PIN_BLUE2,  False)
         GPIO.output(PIN_BLUE3,  True)
         GPIO.output(PIN_BLUE4,  False)
-    
+
         time.sleep(interval)
-    
+
         GPIO.output(PIN_BLUE1,  False)
         GPIO.output(PIN_BLUE2,  False)
         GPIO.output(PIN_BLUE3,  False)
         GPIO.output(PIN_BLUE4,  True)
-        
+
         time.sleep(interval)
 
 def cycle_onoff():
     while 1:
-       
+
         logging.debug("LED Testing")
-    
+
         GPIO.output(PIN_BLUE1,  True)
         GPIO.output(PIN_BLUE2,  True)
         GPIO.output(PIN_BLUE3,  True)
@@ -76,9 +81,9 @@ def cycle_onoff():
         GPIO.output(PIN_RED,    True)
         GPIO.output(PIN_YELLOW, True)
         GPIO.output(PIN_GREED,  True)
-        
+
         time.sleep(1)
-    
+
         GPIO.output(PIN_BLUE1,  False)
         GPIO.output(PIN_BLUE2,  False)
         GPIO.output(PIN_BLUE3,  False)
@@ -86,9 +91,9 @@ def cycle_onoff():
         GPIO.output(PIN_RED,    False)
         GPIO.output(PIN_YELLOW, False)
         GPIO.output(PIN_GREED,  False)
-        
+
         time.sleep(1)
-        
+
         #GPIO.cleanup()
 
 if __name__ == "__main__":

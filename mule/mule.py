@@ -5,37 +5,39 @@ import os
 import sys
 import logging.config
 
-from mule import ROOT
-
-from mule.utils import configure as configutil
+from mule import ROOT, LOG_CFG_TAG, DRV_CFG_TAG
+from mule.logging import load_config
+from mule.drive import parse_config, create_protoparts
 from mule.drive.vehicle import Vehicle
+import mule.calibrate.devices as calibrators
 
-DEFAULT_LOGCFG = os.path.join(ROOT, 'log/config/default.yml')
-DEFAULT_DRVCFG = os.path.join(ROOT, 'drive/config/default.yml')
+logger = logging.getLogger(__name__)
 
 @click.group()
-@click.option('--logcfg', default=DEFAULT_LOGCFG, type=click.Path(exists=True, readable=True))
-def cli(logcfg):
-    print('Opening {}'.format(logcfg))
-    with open(logcfg, 'r') as fd:
-        config = yaml.load(fd)
-        logging.config.dictConfig(config)
+@click.option('--logcfg', 'ref',
+              default=LOG_CFG_REF)
+              #type=click.Path(exists=True, readable=True))
+def cli(ref):
+    config = load_config(ref)
+    logging.config.dictConfig(config)
 
-    logging.info('Logging brought to you by {}'.format(logcfg))
+    logger.debug(f'Loaded logging config: {}')
 
-@cli.command()
-def calibrate():
-    pass
 
 @cli.command()
-@click.option('--cfg', default=DEFAULT_DRVCFG, type=click.Path(exists=True, readable=True))
-@click.option('--model_path', type=click.Path(exists=True),required=False)
-def drive(cfg, model_path):
+@click.option('--device')
+def calibrate(device):
+    calibrators.registry[device]()
 
-    #print(model_path)
-    #raise
+@cli.command()
+@click.option('--cfg', 'ref',
+              default=DRV_CFG_REF,
+              type=click.STRING)
+              # type=click.Path(exists=True, readable=True))
+@click.option('--model_path', type=click.Path(exists=True), required=False)
+def drive(ref, model_path):
 
-    config = configutil.parse_config(cfg)
+    config = parse_config(ref)
 
     #TODO: Refactor passing model path cleanly!
     if model_path:
@@ -43,14 +45,12 @@ def drive(cfg, model_path):
         for part in config['parts']:
             #print(part)
             for key in part.keys():
-                if key=='ai':
+                if key == 'ai':
                     part['ai']['arguments']['model_path'] = model_path
     else:
         logging.debug("No model specified.".format())
 
-    #print(config)
-    #raise
-    protoparts = configutil.create_protoparts(config['parts'])
+    protoparts = create_protoparts(config['parts'])
 
     logging.info('Creating vehicle from loaded configuration')
 
@@ -62,10 +62,11 @@ def drive(cfg, model_path):
 
     logging.info('Initiating drive loop')
 
-    mule.drive(freq_hertz=config['drive']['freq_hertz'],
-               verbose=config['drive']['verbose'],
-               verbosity=config['drive']['verbosity'],
-               )
+    mule.drive(
+        freq_hertz=config['drive']['freq_hertz'],
+        verbose=config['drive']['verbose'],
+        verbosity=config['drive']['verbosity'],
+    )
 
     logging.info('Killing engine')
 
@@ -76,6 +77,7 @@ def drive(cfg, model_path):
 @cli.command()
 def train():
     pass
+
 
 if __name__ == '__main__':
     print('*** Welcome to Mule.AI ***')
