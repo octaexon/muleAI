@@ -1,83 +1,60 @@
 import abc
 import threading
-import time
 
 
 class BasePart(abc.ABC):
-    ''' Common interface for vehicle parts '''
+    """Common interface for vehicle parts."""
     @abc.abstractmethod
     def start(self):
-        ''' Starts part components '''
-        pass
-
+        """Starts part components."""
+        raise NotImplementedError
 
     @abc.abstractmethod
     def transform(self, state):
-        ''' Transforms vehicle state
+        """Transforms vehicle state.
 
-            Arguments
-
-            state: dict
-                stores elements comprising vehicle state, for example,
-                latest image received from camera
-        '''
-        pass
-
+        Args:
+            state: dictionary storing elements comprising vehicle state
+        """
+        raise NotImplementedError
 
     @abc.abstractmethod
     def stop(self):
-        ''' Stops part components '''
-        pass
+        """Stops part components."""
+        raise NotImplementedError
 
-    def __str__(self):
-        return "{} with {} and {} input/output keys".format(self._class_string, self.__class__.input_keys, self.__class__.output_keys)
-
-    def __repr__(self):
-        return "{} with {} and {} input/output keys".format(self.__class__.__name__, self.__class__.input_keys, self.__class__.output_keys)
-    
-    
-    @property
-    def _class_string(self):
-        return self.__class__.__name__
 
 class ThreadComponent:
-    ''' Component held by part that added threading capability
+    """Stoppable threading mixin.
 
-        Apart from knowing its own state of activity, it holds a copy of the target
-        function that is responsible for updating the part's state.
-    '''
+    Attributes:
+        target: function to be repeated evaluated in separate thread
+        thread: thread object
+        event: flag to stop thread
+    """
     def __init__(self, target, **kwargs):
-        ''' 
-            Arguments
+        """Create thread holding target function.
 
-            target: function
-                function that updates part's state
+        Args:
+            target: function to be repeated evaluated in separate thread
+            kwargs: arguments to be passed to target
 
-            kwargs: 
-                arguments to be passed to target
-
-        '''
-        self.running = False
+        """
         self.target = target
-        self.thread = threading.Thread(target=self._threaded_target, kwargs=kwargs)
-
+        self.thread = threading.Thread(target=self._repeated_target,
+                                       kwargs=kwargs)
+        self.event = threading.Event()
 
     def start(self):
-        ''' Starts thread '''
-        self.running = True
+        """Starts thread."""
         self.thread.start()
 
-
     def stop(self):
-        ''' Causes self._threaded_target to return, thereby stopping the thread '''
-        self.running = False
-        time.sleep(1)
+        """Stops thread."""
+        self.event.set()
+        self.thread.join()
 
-
-    def _threaded_target(self, **kwargs):
-        ''' Wraps target function, generally the _update function from a part
-            so that updating continues indefinitely unless the thread is stopped
-        '''
-        while self.running:
+    def _repeated_target(self, **kwargs):
+        """Enables repeated evaluation of target function."""
+        while not self.event.is_set():
             self.target(**kwargs)
-

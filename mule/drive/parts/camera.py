@@ -7,18 +7,17 @@ import cv2 as cv2
 from .base import BasePart, ThreadComponent
 
 class BaseCam(BasePart):
-    ''' Functionality and state common to all cameras
+    """Functionality and state common to all cameras
 
-        The main task of this base class is to incorporate threading
-        capabilities for each camera object
+    The main task of this base class is to incorporate threading
+    capabilities for each camera object
 
-        class-level members:
+    Attributes:
+    input_keys, output_keys: tuples
+    keys to access vehicle state dictionary
 
-        input_keys, output_keys: tuples
-        keys to access vehicle state dictionary
-
-        Child classes should update RGB images
-    '''
+    Child classes should update RGB images
+    """
     input_keys = ()
     output_keys = ('camera_array',)
 
